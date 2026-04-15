@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cap. 22 — Sonido | Tippens</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<style>
+  :root {
+    --blue-900: #042C53; --blue-800: #0C447C; --blue-600: #185FA5;
+    --blue-400: #378ADD; --blue-200: #85B7EB; --blue-100: #B5D4F4; --blue-50: #E6F1FB;
+    --amber-900: #412402; --amber-800: #633806; --amber-600: #854F0B;
+    --amber-400: #BA7517; --amber-200: #EF9F27; --amber-100: #FAC775; --amber-50: #FAEEDA;
+    --green-800: #27500A; --green-600: #3B6D11; --green-200: #97C459; --green-50: #EAF3DE; --green-100: #C0DD97;
+    --navy: #042C53; --cream: #FFFDF6;
+    --gray-50: #F1EFE8; --gray-200: #B4B2A9; --gray-600: #5F5E5A; --gray-800: #444441;
+    --orange-50: #FFF3E8;
+    --red-50: #FCEBEB; --red-600: #A32D2D; --red-800: #791F1F;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background:#f4f6f8; color:#1a1a2e; font-size:15px; line-height:1.7; }
+
+  /* NAV */
+  .nav { position:sticky; top:0; background:var(--blue-800); z-index:100; padding:0 2rem; display:flex; align-items:center; gap:1.5rem; flex-wrap:wrap; }
+  .nav-brand { color:#fff; font-size:15px; font-weight:700; padding:0.8rem 0; white-space:nowrap; }
+  .nav a { color:var(--blue-100); text-decoration:none; font-size:13px; padding:0.8rem 0.4rem; white-space:nowrap; transition:color .2s; }
+  .nav a:hover { color:#fff; }
+
+  .page { max-width:1000px; margin:0 auto; padding:2rem 1.5rem 4rem; }
+
+  /* SECTION HEADERS */
+  .sec-header { background:var(--blue-600); color:#fff; border-radius:10px 10px 0 0; padding:0.8rem 1.4rem; font-size:17px; font-weight:700; margin-top:2.5rem; display:flex; align-items:center; gap:10px; }
+  .sec-header .badge { background:rgba(255,255,255,0.25); border-radius:50%; width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; flex-shrink:0; }
+
+  /* CARDS */
+  .card { background:#fff; border:1px solid #dde3ea; border-radius:0 0 10px 10px; padding:1.4rem 1.6rem; margin-bottom:0.3rem; }
+  .card + .sec-header { margin-top:2.5rem; }
+
+  /* DECISION TABLE */
+  .decision-table { width:100%; border-collapse:collapse; font-size:14px; }
+  .decision-table th { background:var(--blue-800); color:#fff; padding:10px 14px; text-align:left; }
+  .decision-table td { padding:9px 14px; border-bottom:1px solid #dde3ea; vertical-align:top; }
+  .decision-table tr:nth-child(even) td { background:var(--blue-50); }
+  .decision-table .formula-cell { font-family:monospace; color:var(--blue-800); font-weight:600; }
+  .decision-table tr:hover td { background:var(--blue-100); }
+
+  /* CONCEPT BOX */
+  .concept-box { background:var(--blue-50); border:1.5px solid var(--blue-200); border-radius:8px; padding:1rem 1.3rem; margin:1rem 0; }
+  .concept-box .concept-title { font-size:14px; font-weight:700; color:var(--blue-800); margin-bottom:0.4rem; }
+  .concept-box p { font-size:14px; color:#333; }
+
+  /* ANALOGY BOX */
+  .analogy-box { border-left:5px solid var(--amber-400); background:var(--cream); border-radius:0 8px 8px 0; padding:0.9rem 1.2rem; margin:1rem 0; }
+  .analogy-label { font-size:11px; font-weight:700; color:var(--amber-600); text-transform:uppercase; letter-spacing:.06em; margin-bottom:4px; }
+  .analogy-box p { font-size:14px; color:#555; }
+
+  /* FORMULA BLOCK */
+  .formula-block { background:var(--green-50); border-left:5px solid var(--green-200); border-radius:0 8px 8px 0; padding:1.1rem 1.4rem; margin:1rem 0; }
+  .formula-block .formula-title { font-size:13px; font-weight:700; color:var(--green-800); margin-bottom:0.6rem; text-transform:uppercase; letter-spacing:.04em; }
+  .formula-eq { text-align:center; padding:0.5rem 0; font-size:16px; }
+  .formula-desc { font-size:12.5px; color:var(--green-600); text-align:center; margin-top:0.3rem; }
+  .formula-vars { margin-top:0.8rem; }
+  .var-row { display:grid; grid-template-columns:50px 1fr 120px; gap:8px; align-items:start; padding:5px 0; border-bottom:1px solid var(--green-100); font-size:13px; }
+  .var-row:last-child { border-bottom:none; }
+  .var-sym { font-weight:700; color:var(--blue-800); }
+  .var-unit { color:var(--amber-600); font-weight:600; text-align:right; }
+
+  /* EXAMPLE */
+  .example-block { border-left:5px solid var(--blue-400); border-radius:0 8px 8px 0; padding:1rem 1.3rem; margin:1.2rem 0; background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.06); }
+  .example-title { font-size:13px; font-weight:700; color:var(--blue-800); text-transform:uppercase; letter-spacing:.04em; margin-bottom:0.8rem; }
+  .step { display:flex; gap:14px; align-items:flex-start; margin:0.7rem 0; }
+  .step-num { background:var(--blue-600); color:#fff; border-radius:50%; width:26px; height:26px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; flex-shrink:0; margin-top:2px; }
+  .step-content { flex:1; font-size:14px; line-height:1.6; }
+  .result-box { background:var(--blue-800); color:#fff; border-radius:8px; padding:0.8rem 1.2rem; margin-top:1rem; text-align:center; font-size:15px; font-weight:700; }
+
+  /* WHEN TO USE */
+  .when-tag { display:inline-block; background:var(--blue-100); color:var(--blue-800); border-radius:20px; padding:3px 12px; font-size:12px; font-weight:600; margin:3px 2px; }
+
+  /* EXTRA DIFFICULTY */
+  .extra-sec { background:var(--orange-50); border:2px solid #FFA040; border-radius:10px; padding:1.4rem 1.6rem; margin:1.5rem 0; }
+  .extra-header { font-size:16px; font-weight:700; color:#7A3800; margin-bottom:1rem; display:flex; align-items:center; gap:8px; }
+  .star { color:#FF8C00; font-size:20px; }
+
+  /* ERROR TABLE */
+  .error-table { width:100%; border-collapse:collapse; font-size:14px; margin-top:1rem; }
+  .error-table th { background:var(--red-600); color:#fff; padding:10px 14px; text-align:left; }
+  .error-table td { padding:9px 14px; border-bottom:1px solid #f5c1c1; vertical-align:top; }
+  .error-table tr:nth-child(even) td { background:var(--red-50); }
+
+  /* CHEATSHEET */
+  .cheatsheet { background:var(--navy); color:#e8edf5; border-radius:12px; padding:1.8rem 2rem; margin-top:1.5rem; }
+  .cheatsheet h2 { color:#B5D4F4; font-size:18px; margin-bottom:1.4rem; text-align:center; letter-spacing:.05em; }
+  .cs-grid { display:grid; grid-template-columns:1fr 1fr; gap:1.2rem; }
+  .cs-card { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:8px; padding:1rem 1.2rem; }
+  .cs-topic { font-size:11px; color:var(--blue-200); text-transform:uppercase; letter-spacing:.06em; font-weight:700; margin-bottom:0.5rem; }
+  .cs-formula { color:#fff; font-size:14px; margin:4px 0; }
+  .cs-note { color:var(--amber-100); font-size:12px; margin-top:0.4rem; }
+
+  /* TABS */
+  .tube-compare { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0; }
+  .tube-card { border:2px solid var(--blue-200); border-radius:8px; padding:1.1rem; }
+  .tube-card.cerrado { border-color:var(--amber-400); }
+  .tube-card h4 { font-size:14px; font-weight:700; margin-bottom:0.8rem; }
+  .tube-card.abierto h4 { color:var(--blue-800); }
+  .tube-card.cerrado h4 { color:var(--amber-800); }
+  .tube-row { display:flex; justify-content:space-between; font-size:13px; padding:4px 0; border-bottom:1px solid #eee; }
+  .tube-row:last-child { border-bottom:none; }
+  .tube-label { color:var(--gray-600); }
+  .tube-val { font-weight:600; color:var(--blue-800); }
+  .tube-card.cerrado .tube-val { color:var(--amber-800); }
+
+  /* SIGN CONVENTION */
+  .sign-table { width:100%; border-collapse:collapse; font-size:14px; margin:1rem 0; }
+  .sign-table th { background:var(--blue-600); color:#fff; padding:8px 12px; }
+  .sign-table td { padding:8px 12px; border:1px solid var(--blue-100); }
+  .sign-pos { color:#1a7a1a; font-weight:700; font-size:16px; }
+  .sign-neg { color:#a32d2d; font-weight:700; font-size:16px; }
+
+  /* RESPONSIVE */
+  @media(max-width:640px) {
+    .cs-grid { grid-template-columns:1fr; }
+    .tube-compare { grid-template-columns:1fr; }
+    .var-row { grid-template-columns:45px 1fr 90px; }
+  }
+  .tag-section { display:inline-block; background:var(--blue-100); color:var(--blue-800); padding:2px 10px; border-radius:4px; font-size:12px; font-weight:700; margin-bottom:8px; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="nav-brand">🔊 Cap. 22 — Sonido</span>
+  <a href="#tabla">Tabla Decisión</a>
+  <a href="#rapidez">Rapidez</a>
+  <a href="#tubos">Tubos</a>
+  <a href="#intensidad">Intensidad/dB</a>
+  <a href="#pulsaciones">Pulsaciones</a>
+  <a href="#doppler">Doppler</a>
+  <a href="#extra">★ Extra</a>
+  <a href="#errores">Errores</a>
+  <a href="#cheatsheet">Cheatsheet</a>
+</nav>
+
+<div class="page">
+
+<!-- ══════════ TABLA DE DECISIÓN ══════════ -->
+<div id="tabla" class="sec-header"><span class="badge">🎯</span> Tabla de decisión — ¿Qué fórmula usar?</div>
+<div class="card">
+  <p style="font-size:13px;color:var(--gray-600);margin-bottom:1rem;">Lee los datos del problema → encuentra la fila → aplica esa fórmula.</p>
+  <table class="decision-table">
+    <tr>
+      <th>El problema te da…</th>
+      <th>Quieres encontrar…</th>
+      <th>Usa esta fórmula</th>
+    </tr>
+    <tr>
+      <td>Temperatura T (K), gas → aire</td>
+      <td>Rapidez del sonido v</td>
+      <td class="formula-cell">\(v = 331\sqrt{T/273}\)</td>
+    </tr>
+    <tr>
+      <td>Módulo de Young Y, densidad ρ</td>
+      <td>v en varilla/alambre</td>
+      <td class="formula-cell">\(v = \sqrt{Y/\rho}\)</td>
+    </tr>
+    <tr>
+      <td>Módulo de volumen B, densidad ρ</td>
+      <td>v en fluido/líquido</td>
+      <td class="formula-cell">\(v = \sqrt{B/\rho}\)</td>
+    </tr>
+    <tr>
+      <td>Longitud L del tubo <strong>abierto</strong>, v</td>
+      <td>Frecuencias armónicas</td>
+      <td class="formula-cell">\(f_n = nv/(2L)\)  n=1,2,3…</td>
+    </tr>
+    <tr>
+      <td>Longitud L del tubo <strong>cerrado</strong>, v</td>
+      <td>Frecuencias armónicas</td>
+      <td class="formula-cell">\(f_n = nv/(4L)\)  n=1,3,5…</td>
+    </tr>
+    <tr>
+      <td>Potencia P, área A (o radio r)</td>
+      <td>Intensidad I</td>
+      <td class="formula-cell">\(I = P/A = P/(4\pi r^2)\)</td>
+    </tr>
+    <tr>
+      <td>I₁ y r₁, quieres I₂ a distancia r₂</td>
+      <td>Nueva intensidad</td>
+      <td class="formula-cell">\(I_1 r_1^2 = I_2 r_2^2\)</td>
+    </tr>
+    <tr>
+      <td>Intensidad I en W/m²</td>
+      <td>Nivel β en dB</td>
+      <td class="formula-cell">\(\beta = 10\log(I/10^{-12})\)</td>
+    </tr>
+    <tr>
+      <td>Nivel β en dB</td>
+      <td>Intensidad I</td>
+      <td class="formula-cell">\(I = 10^{\beta/10} \times 10^{-12}\)</td>
+    </tr>
+    <tr>
+      <td>Dos frecuencias f₁, f₂ simultáneas</td>
+      <td>Frecuencia de pulsaciones</td>
+      <td class="formula-cell">\(f_{pulso} = |f_1 - f_2|\)</td>
+    </tr>
+    <tr>
+      <td>Fuente/observador en movimiento, fs</td>
+      <td>Frecuencia aparente fo</td>
+      <td class="formula-cell">\(f_o = f_s \cdot \dfrac{V + v_o}{V - v_s}\)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ══════════ RAPIDEZ DEL SONIDO ══════════ -->
+<div id="rapidez" class="sec-header"><span class="badge">1</span> Rapidez del Sonido</div>
+<div class="card">
+
+  <div class="formula-block">
+    <div class="formula-title">Fórmula principal — Aire (en función de temperatura)</div>
+    <div class="formula-eq">\[ v = (331 \text{ m/s})\sqrt{\dfrac{T}{273 \text{ K}}} \]</div>
+    <div class="formula-desc">Usada en el 90% de problemas del capítulo</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">v</span><span>Rapidez del sonido</span><span class="var-unit">m/s</span></div>
+      <div class="var-row"><span class="var-sym">T</span><span>Temperatura absoluta (<strong>siempre en Kelvin</strong>: T = °C + 273)</span><span class="var-unit">K</span></div>
+      <div class="var-row"><span class="var-sym">331</span><span>Rapidez del sonido en aire a 0 °C (273 K) — constante</span><span class="var-unit">m/s</span></div>
+    </div>
+  </div>
+
+  <div class="formula-block" style="margin-top:1rem;">
+    <div class="formula-title">En varilla / alambre sólido</div>
+    <div class="formula-eq">\[ v = \sqrt{\dfrac{Y}{\rho}} \]</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">Y</span><span>Módulo de elasticidad de Young</span><span class="var-unit">Pa (N/m²)</span></div>
+      <div class="var-row"><span class="var-sym">ρ</span><span>Densidad del material (rho)</span><span class="var-unit">kg/m³</span></div>
+    </div>
+  </div>
+
+  <div class="formula-block" style="margin-top:1rem;">
+    <div class="formula-title">En fluido (líquido o gas)</div>
+    <div class="formula-eq">\[ v = \sqrt{\dfrac{B}{\rho}} \]</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">B</span><span>Módulo de volumen (bulk modulus)</span><span class="var-unit">Pa</span></div>
+    </div>
+  </div>
+
+  <div class="formula-block" style="margin-top:1rem;">
+    <div class="formula-title">En gas ideal (fórmula completa)</div>
+    <div class="formula-eq">\[ v = \sqrt{\dfrac{\gamma RT}{M}} \]</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">γ</span><span>Razón de calores específicos (gamma). Para aire ≈ 1.4</span><span class="var-unit">adim.</span></div>
+      <div class="var-row"><span class="var-sym">R</span><span>Constante universal de los gases = 8.314</span><span class="var-unit">J/(mol·K)</span></div>
+      <div class="var-row"><span class="var-sym">T</span><span>Temperatura absoluta</span><span class="var-unit">K</span></div>
+      <div class="var-row"><span class="var-sym">M</span><span>Masa molar del gas</span><span class="var-unit">kg/mol</span></div>
+    </div>
+  </div>
+
+  <div class="example-block">
+    <div class="example-title">Ejemplo resuelto — Rapidez a 20 °C</div>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Datos:</strong> T = 20 °C. Convertir a Kelvin: T = 20 + 273 = <strong>293 K</strong></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Fórmula:</strong> \(v = 331\sqrt{T/273}\)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Sustituir:</strong> \(v = 331\sqrt{293/273} = 331\sqrt{1.0733}\)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Calcular raíz:</strong> \(\sqrt{1.0733} \approx 1.036\)</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><strong>Multiplicar:</strong> \(v = 331 \times 1.036\)</div></div>
+    <div class="result-box">v ≈ 343 m/s</div>
+  </div>
+</div>
+
+<!-- ══════════ TUBOS ══════════ -->
+<div id="tubos" class="sec-header"><span class="badge">2</span> Vibración en Columnas de Aire (Tubos)</div>
+<div class="card">
+  <p style="font-size:13px;color:var(--gray-600);margin-bottom:1rem;">Regla de oro: extremo <strong>abierto</strong> → <strong>antinodo</strong> (máximo). Extremo <strong>cerrado</strong> → <strong>nodo</strong> (cero).</p>
+
+  <div class="tube-compare">
+    <div class="tube-card abierto">
+      <h4>🔓 Tubo ABIERTO (ambos extremos)</h4>
+      <div class="tube-row"><span class="tube-label">Condición</span><span class="tube-val">Antinodo — Antinodo</span></div>
+      <div class="tube-row"><span class="tube-label">Longitud de onda</span><span class="tube-val">\(\lambda_n = \dfrac{2L}{n}\)</span></div>
+      <div class="tube-row"><span class="tube-label">Frecuencia</span><span class="tube-val">\(f_n = \dfrac{nv}{2L}\)</span></div>
+      <div class="tube-row"><span class="tube-label">Valores de n</span><span class="tube-val">n = 1, 2, 3, 4… (todos)</span></div>
+      <div class="tube-row"><span class="tube-label">1er sobretono</span><span class="tube-val">n=2 → 2do armónico = 2f₁</span></div>
+    </div>
+    <div class="tube-card cerrado">
+      <h4>🔒 Tubo CERRADO (un extremo)</h4>
+      <div class="tube-row"><span class="tube-label">Condición</span><span class="tube-val">Nodo — Antinodo</span></div>
+      <div class="tube-row"><span class="tube-label">Longitud de onda</span><span class="tube-val">\(\lambda_n = \dfrac{4L}{n}\)</span></div>
+      <div class="tube-row"><span class="tube-label">Frecuencia</span><span class="tube-val">\(f_n = \dfrac{nv}{4L}\)</span></div>
+      <div class="tube-row"><span class="tube-label">Valores de n</span><span class="tube-val">n = 1, 3, 5… (<strong>solo impares</strong>)</span></div>
+      <div class="tube-row"><span class="tube-label">1er sobretono</span><span class="tube-val">n=3 → 3er armónico = 3f₁</span></div>
+    </div>
+  </div>
+
+  <div class="analogy-box" style="margin-top:1rem;">
+    <div class="analogy-label">Analogía</div>
+    <p>Tubo cerrado = cuarto con una pared. La onda "rebota" en la pared cerrada → solo encajan longitudes de onda que terminan en un nodo allí. Por eso solo caben los impares (1/4λ, 3/4λ, 5/4λ…). Tubo abierto = pasillo con dos puertas — caben todas las longitudes.</p>
+  </div>
+
+  <div class="example-block">
+    <div class="example-title">Ejemplo 22.4 — Tubo cerrado, L = 12 cm, T = 30°C</div>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Calcular v:</strong> T = 30 + 273 = 303 K → \(v = 331\sqrt{303/273} = 331 \times 1.053 = 349 \text{ m/s}\)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>L = 12 cm = 0.12 m</strong> — Tubo cerrado → \(f_n = nv/(4L)\)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Fundamental (n=1):</strong> \(f_1 = \dfrac{1 \times 349}{4 \times 0.12} = \dfrac{349}{0.48} = 727 \text{ Hz}\)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>1er sobretono (n=3):</strong> \(f_3 = 3 \times 727 = 2181 \text{ Hz}\)</div></div>
+    <div class="step"><div class="step-num">5</div><div class="step-content"><strong>2do sobretono (n=5):</strong> \(f_5 = 5 \times 727 = 3635 \text{ Hz}\)</div></div>
+    <div class="result-box">f₁ = 727 Hz &nbsp;|&nbsp; f₃ = 2 181 Hz &nbsp;|&nbsp; f₅ = 3 635 Hz</div>
+  </div>
+
+  <div class="example-block">
+    <div class="example-title">Ejemplo 22.5 — Tubo abierto, 2do sobretono = 1800 Hz, v = 340 m/s → hallar L</div>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Identificar n:</strong> En tubo abierto, 2do sobretono = n = 3 (3er armónico)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Fórmula:</strong> \(f_3 = \dfrac{3v}{2L}\) → despejar L: \(L = \dfrac{3v}{2f_3}\)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Sustituir:</strong> \(L = \dfrac{3 \times 340}{2 \times 1800} = \dfrac{1020}{3600}\)</div></div>
+    <div class="result-box">L = 0.283 m = 28.3 cm</div>
+  </div>
+</div>
+
+<!-- ══════════ INTENSIDAD / dB ══════════ -->
+<div id="intensidad" class="sec-header"><span class="badge">3</span> Intensidad y Nivel de Intensidad (dB)</div>
+<div class="card">
+
+  <div class="formula-block">
+    <div class="formula-title">Intensidad de una fuente puntual</div>
+    <div class="formula-eq">\[ I = \dfrac{P}{A} = \dfrac{P}{4\pi r^2} \quad \text{(W/m}^2\text{)} \]</div>
+    <div class="formula-desc">La potencia se distribuye sobre una esfera de área 4πr²</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">I</span><span>Intensidad del sonido</span><span class="var-unit">W/m²</span></div>
+      <div class="var-row"><span class="var-sym">P</span><span>Potencia de la fuente</span><span class="var-unit">W (watts)</span></div>
+      <div class="var-row"><span class="var-sym">r</span><span>Distancia a la fuente</span><span class="var-unit">m</span></div>
+    </div>
+  </div>
+
+  <div class="formula-block">
+    <div class="formula-title">Ley del inverso del cuadrado (comparar dos distancias)</div>
+    <div class="formula-eq">\[ I_1 r_1^2 = I_2 r_2^2 \quad \Longleftrightarrow \quad \dfrac{I_1}{I_2} = \dfrac{r_2^2}{r_1^2} \]</div>
+    <div class="formula-desc">Al duplicar la distancia, la intensidad se divide entre 4</div>
+  </div>
+
+  <div class="formula-block">
+    <div class="formula-title">Nivel de intensidad en decibeles (β)</div>
+    <div class="formula-eq">\[ \beta = 10 \log\!\left(\dfrac{I}{I_0}\right) \quad \text{(dB)} \]</div>
+    <div class="formula-desc">I₀ = 10⁻¹² W/m² → umbral de audición = 0 dB</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">β</span><span>Nivel de intensidad (beta)</span><span class="var-unit">dB</span></div>
+      <div class="var-row"><span class="var-sym">I</span><span>Intensidad del sonido</span><span class="var-unit">W/m²</span></div>
+      <div class="var-row"><span class="var-sym">I₀</span><span>Umbral de audición = 10⁻¹² W/m² (constante)</span><span class="var-unit">W/m²</span></div>
+    </div>
+  </div>
+
+  <div class="concept-box">
+    <div class="concept-title">Referencias de dB que debes memorizar</div>
+    <p>0 dB → umbral audición &nbsp;|&nbsp; 20 dB → susurro &nbsp;|&nbsp; 65 dB → conversación normal &nbsp;|&nbsp; 90 dB → tráfico intenso &nbsp;|&nbsp; 120 dB → umbral de dolor &nbsp;|&nbsp; 140–160 dB → motor a reacción</p>
+  </div>
+
+  <div class="example-block">
+    <div class="example-title">Ejemplo — Fuente de 40 W a r = 3.5 m → calcular I y β</div>
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Intensidad:</strong> \(I = \dfrac{P}{4\pi r^2} = \dfrac{40}{4\pi(3.5)^2} = \dfrac{40}{4\pi \times 12.25} = \dfrac{40}{153.94}\)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">\(I = 0.260 \text{ W/m}^2\)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Nivel:</strong> \(\beta = 10\log\!\left(\dfrac{0.260}{10^{-12}}\right) = 10\log(2.60 \times 10^{11})\)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">\(\beta = 10 \times 11.415 = 114.15\) dB</div></div>
+    <div class="result-box">I = 0.260 W/m² &nbsp;|&nbsp; β ≈ 114 dB</div>
+  </div>
+</div>
+
+<!-- ══════════ PULSACIONES ══════════ -->
+<div id="pulsaciones" class="sec-header"><span class="badge">4</span> Interferencia y Pulsaciones</div>
+<div class="card">
+
+  <div class="formula-block">
+    <div class="formula-title">Frecuencia de pulsaciones</div>
+    <div class="formula-eq">\[ f_{\text{pulso}} = |f_1 - f_2| \]</div>
+    <div class="formula-desc">Resultado en Hz = número de "golpes de volumen" por segundo que escuchas</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">f₁, f₂</span><span>Frecuencias de las dos fuentes simultáneas</span><span class="var-unit">Hz</span></div>
+      <div class="var-row"><span class="var-sym">f<sub>pulso</sub></span><span>Frecuencia de las pulsaciones (batimientos)</span><span class="var-unit">Hz</span></div>
+    </div>
+  </div>
+
+  <div class="analogy-box">
+    <div class="analogy-label">Analogía</div>
+    <p>Dos cantantes que cantan casi la misma nota: cada cierto tiempo sus voces se sincronizan (se escucha más fuerte) y luego se des-sincronizan (casi silencio). Ese ciclo fuerte-silencio es una pulsación.</p>
+  </div>
+
+  <div class="example-block">
+    <div class="example-title">Ejemplo — Dos diapasones: 256 Hz y 259 Hz</div>
+    <div class="step"><div class="step-num">1</div><div class="step-content">\(f_{\text{pulso}} = |259 - 256| = 3 \text{ Hz}\)</div></div>
+    <div class="result-box">Se escuchan 3 pulsaciones por segundo</div>
+  </div>
+</div>
+
+<!-- ══════════ EFECTO DOPPLER ══════════ -->
+<div id="doppler" class="sec-header"><span class="badge">5</span> Efecto Doppler</div>
+<div class="card">
+
+  <div class="formula-block">
+    <div class="formula-title">Fórmula general del Efecto Doppler</div>
+    <div class="formula-eq">\[ f_o = f_s \cdot \dfrac{V + v_o}{V - v_s} \]</div>
+    <div class="formula-desc">Frecuencia que percibe el observador en función del movimiento de ambos</div>
+    <div class="formula-vars">
+      <div class="var-row"><span class="var-sym">f<sub>o</sub></span><span>Frecuencia percibida por el <strong>observador</strong></span><span class="var-unit">Hz</span></div>
+      <div class="var-row"><span class="var-sym">f<sub>s</sub></span><span>Frecuencia real de la <strong>fuente</strong></span><span class="var-unit">Hz</span></div>
+      <div class="var-row"><span class="var-sym">V</span><span>Rapidez del sonido en el medio (≈343 m/s en aire a 20°C)</span><span class="var-unit">m/s</span></div>
+      <div class="var-row"><span class="var-sym">v<sub>o</sub></span><span>Rapidez del <strong>observador</strong> (con signo, ver tabla)</span><span class="var-unit">m/s</span></div>
+      <div class="var-row"><span class="var-sym">v<sub>s</sub></span><span>Rapidez de la <strong>fuente</strong> (con signo, ver tabla)</span><span class="var-unit">m/s</span></div>
+    </div>
+  </div>
+
+  <p style="font-size:14px;font-weight:700;color:var(--blue-800);margin:1.2rem 0 0.5rem;">⚠️ Convención de signos — CRÍTICA</p>
+  <table class="sign-table">
+    <tr><th>Quién se mueve</th><th>Dirección</th><th>Signo a usar</th><th>Efecto</th></tr>
+    <tr>
+      <td><strong>Fuente (v<sub>s</sub>)</strong></td>
+      <td>Se <strong>acerca</strong> al observador</td>
+      <td><span class="sign-pos">+ positivo</span></td>
+      <td>f<sub>o</sub> &gt; f<sub>s</sub> (agudo)</td>
+    </tr>
+    <tr>
+      <td><strong>Fuente (v<sub>s</sub>)</strong></td>
+      <td>Se <strong>aleja</strong> del observador</td>
+      <td><span class="sign-neg">− negativo</span></td>
+      <td>f<sub>o</sub> &lt; f<sub>s</sub> (grave)</td>
+    </tr>
+    <tr>
+      <td><strong>Observador (v<sub>o</sub>)</strong></td>
+      <td>Se <strong>acerca</strong> a la fuente</td>
+      <td><span class="sign-pos">+ positivo</span></td>
+      <td>f<sub>o</sub> &gt; f<sub>s</sub> (agudo)</td>
+    </tr>
+    <tr>
+      <td><strong>Observador (v<sub>o</sub>)</strong></td>
+      <td>Se <strong>aleja</strong> de la fuente</td>
+      <td><span class="sign-neg">− negativo</span></td>
+      <td>f<sub>o</sub> &lt; f<sub>s</sub> (grave)</td>
+    </tr>
+    <tr>
+      <td><strong>Ambos estacionarios</strong></td>
+      <td>—</td>
+      <td>v<sub>o</sub> = 0, v<sub>s</sub> = 0</td>
+      <td>f<sub>o</sub> = f<sub>s</sub></td>
+    </tr>
+  </table>
+
+  <div class="analogy-box" style="margin-top:1rem;">
+    <div class="analogy-label">Regla fácil para los signos</div>
+    <p>Si alguien se <strong>acerca</strong>, el sonido sube (más agudo) → necesita que el numerador suba o denominador baje → signo según la fórmula. Si alguien se <strong>aleja</strong>, es lo contrario. <em>¿La frecuencia calculada tiene sentido intuitivo? Compruébalo siempre.</em></p>
+  </div>
+
+  <div class="example-block">
+    <div class="example-title">Ejemplo 22.9 — Tren con bocina 400 Hz, v<sub>tren</sub> = 20 m/s, V = 340 m/s</div>
+    <p style="font-size:13px;color:var(--gray-600);margin:0.5rem 0 0.8rem;">Caso A: tren se acerca (v<sub>s</sub> = +20). Caso B: tren se aleja (v<sub>s</sub> = −20)</p>
+    <div class="step"><div class="step-num">A</div><div class="step-content"><strong>Acercamiento:</strong> \(f_o = 400 \cdot \dfrac{340 + 0}{340 - 20} = 400 \cdot \dfrac{340}{320} = 400 \times 1.0625\)</div></div>
+    <div class="result-box" style="margin-bottom:0.8rem;">Acercamiento: f<sub>o</sub> = 425 Hz (más agudo ✓)</div>
+    <div class="step"><div class="step-num">B</div><div class="step-content"><strong>Alejamiento:</strong> \(f_o = 400 \cdot \dfrac{340}{340 - (-20)} = 400 \cdot \dfrac{340}{360} = 400 \times 0.944\)</div></div>
+    <div class="result-box">Alejamiento: f<sub>o</sub> = 378 Hz (más grave ✓)</div>
+  </div>
+
+  <div class="example-block">
+    <div class="example-title">Ejemplo 22.10 — Auto (v<sub>s</sub> = +20 m/s) y ciclista que huye (v<sub>o</sub> = −12 m/s), f<sub>s</sub> = 400 Hz</div>
+    <div class="step"><div class="step-num">1</div><div class="step-content">Auto se acerca → v<sub>s</sub> = <span class="sign-pos">+20</span>. Ciclista huye (se aleja de la fuente) → v<sub>o</sub> = <span class="sign-neg">−12</span></div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">\(f_o = 400 \cdot \dfrac{340 + (-12)}{340 - 20} = 400 \cdot \dfrac{328}{320}\)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">\(f_o = 400 \times 1.025\)</div></div>
+    <div class="result-box">f<sub>o</sub> = 410 Hz</div>
+  </div>
+</div>
+
+<!-- ══════════ EXTRA ★ ══════════ -->
+<div id="extra" class="sec-header" style="background:#A05000;"><span class="badge">★</span> Dificultad Extra — Problemas desafiantes</div>
+<div class="card">
+  <div class="extra-sec">
+    <div class="extra-header"><span class="star">★</span> Problema Extra 1 — Doppler con reflexión (Tipo Problema 22.50)</div>
+    <p style="font-size:14px;margin-bottom:1rem;">Un diapasón de 512 Hz se mueve a 3 m/s hacia una pared. Un observador está parado detrás del diapasón. V = 340 m/s. Calcula las pulsaciones que escucha el observador entre el sonido directo y el reflejado.</p>
+
+    <div class="step"><div class="step-num">1</div><div class="step-content"><strong>Sonido directo:</strong> Fuente se aleja del observador → v<sub>s</sub> = −3 m/s, v<sub>o</sub> = 0
+    \[ f_{\text{directo}} = 512 \cdot \dfrac{340}{340-(-3)} = 512 \cdot \dfrac{340}{343} = 508 \text{ Hz} \]</div></div>
+
+    <div class="step"><div class="step-num">2</div><div class="step-content"><strong>Sonido reflejado — paso 1:</strong> La pared es un "observador" que se acerca a la fuente. v<sub>pared</sub> = 0, pero la fuente se acerca a la pared → v<sub>s</sub> = +3 m/s
+    \[ f_{\text{pared}} = 512 \cdot \dfrac{340}{340-3} = 512 \cdot \dfrac{340}{337} \approx 517 \text{ Hz} \]</div></div>
+
+    <div class="step"><div class="step-num">3</div><div class="step-content"><strong>Paso 2:</strong> La pared re-emite 517 Hz como fuente estacionaria hacia el observador (que también está estacionario). f<sub>reflejado</sub> = 517 Hz.</div></div>
+
+    <div class="step"><div class="step-num">4</div><div class="step-content"><strong>Pulsaciones:</strong> \(f_{\text{pulso}} = |517 - 508| = 9 \text{ Hz}\)</div></div>
+    <div class="result-box" style="background:#7A3800;">Se escuchan 9 pulsaciones/segundo</div>
+  </div>
+
+  <div class="extra-sec" style="margin-top:1rem;">
+    <div class="extra-header"><span class="star">★</span> Problema Extra 2 — Método de resonancia para medir v del sonido (Tipo 22.52)</div>
+    <p style="font-size:14px;margin-bottom:1rem;">Un tubo cerrado (extremo con agua) resuena con una columna de aire a 17 cm y luego a 51 cm, para una fuente de 512 Hz. Calcula la rapidez del sonido y la temperatura del aire.</p>
+
+    <div class="step"><div class="step-num">1</div><div class="step-content">Las resonancias ocurren en L = λ/4, 3λ/4, 5λ/4… La diferencia entre resonancias consecutivas es Δ = λ/2.
+    \[\Delta L = 0.51 - 0.17 = 0.34 \text{ m} = \dfrac{\lambda}{2}\]</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">\(\lambda = 2 \times 0.34 = 0.68 \text{ m}\)</div></div>
+    <div class="step"><div class="step-num">3</div><div class="step-content">\(v = f\lambda = 512 \times 0.68 = 348 \text{ m/s}\)</div></div>
+    <div class="step"><div class="step-num">4</div><div class="step-content">Despejar T: \(348 = 331\sqrt{T/273}\) → \(\sqrt{T/273} = 1.051\) → \(T/273 = 1.105\) → \(T = 301.5 \text{ K}\)</div></div>
+    <div class="result-box" style="background:#7A3800;">v = 348 m/s &nbsp;|&nbsp; T ≈ 301.5 K = 28.5 °C</div>
+  </div>
+
+  <div class="extra-sec" style="margin-top:1rem;">
+    <div class="extra-header"><span class="star">★</span> Problema Extra 3 — Voz en helio (Tipo 22.48)</div>
+    <p style="font-size:14px;margin-bottom:1rem;">La cavidad vocal se comporta como tubo cerrado de longitud fija L. En aire, f₁ = 256 Hz y v<sub>aire</sub> = 340 m/s. En helio v<sub>He</sub> = 970 m/s. ¿Cuál será f₁ en helio?</p>
+    <div class="step"><div class="step-num">1</div><div class="step-content">Para tubo cerrado: \(f_1 = \dfrac{v}{4L}\). Si L es constante: \(\dfrac{f_{He}}{f_{aire}} = \dfrac{v_{He}}{v_{aire}}\)</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-content">\(f_{He} = 256 \times \dfrac{970}{340} = 256 \times 2.853 = 730 \text{ Hz}\)</div></div>
+    <div class="result-box" style="background:#7A3800;">f₁ en helio ≈ 730 Hz — ¡Voz mucho más aguda! ✓</div>
+  </div>
+</div>
+
+<!-- ══════════ ERRORES COMUNES ══════════ -->
+<div id="errores" class="sec-header" style="background:var(--red-600);"><span class="badge">!</span> Errores Comunes</div>
+<div class="card">
+  <table class="error-table">
+    <tr><th>Error típico</th><th>Cómo evitarlo</th></tr>
+    <tr>
+      <td>Usar °C directamente en la fórmula de v del sonido</td>
+      <td>Siempre convierte a Kelvin: <strong>T(K) = T(°C) + 273</strong> antes de sustituir</td>
+    </tr>
+    <tr>
+      <td>Aplicar n=2 en un tubo cerrado</td>
+      <td>Tubo cerrado solo acepta n=1,3,5… (impares). n=2 es imposible en tubo cerrado.</td>
+    </tr>
+    <tr>
+      <td>Confundir "sobretono" con "armónico"</td>
+      <td>1er sobretono ≠ 1er armónico. En tubo abierto: 1er sobretono = 2do armónico (n=2). En cerrado: 1er sobretono = 3er armónico (n=3).</td>
+    </tr>
+    <tr>
+      <td>Equivocar signo en Efecto Doppler</td>
+      <td>Pregúntate: ¿el resultado tiene sentido? Acercamiento → f<sub>o</sub> debe ser MAYOR. Alejamiento → f<sub>o</sub> debe ser MENOR. Si no, revisa el signo.</td>
+    </tr>
+    <tr>
+      <td>Olvidar el valor absoluto en pulsaciones</td>
+      <td>Siempre: f<sub>pulso</sub> = |f₁ − f₂|. Nunca puede ser negativo.</td>
+    </tr>
+    <tr>
+      <td>Confundir I en W/m² con β en dB</td>
+      <td>Son unidades distintas. I es la intensidad física. β es el nivel logarítmico. Identifica cuál te pide el problema.</td>
+    </tr>
+    <tr>
+      <td>Dividir entre área en lugar de 4πr² para fuente puntual</td>
+      <td>Una fuente puntual irradia en todas direcciones: A = 4πr². Si el área está dada directamente, usa I = P/A.</td>
+    </tr>
+    <tr>
+      <td>Usar log en base 10 en una calculadora que tiene ln</td>
+      <td>La fórmula dB usa log₁₀ (log común), NO logaritmo natural (ln). En calculadora: tecla "log", no "ln".</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ══════════ CHEATSHEET ══════════ -->
+<div id="cheatsheet" class="sec-header" style="background:var(--navy);"><span class="badge">📄</span> Cheatsheet — Todo lo esencial</div>
+<div class="card" style="padding:0;border:none;">
+  <div class="cheatsheet">
+    <h2>⚡ CHEATSHEET — CAPÍTULO 22: SONIDO</h2>
+    <div class="cs-grid">
+
+      <div class="cs-card">
+        <div class="cs-topic">Rapidez del sonido</div>
+        <div class="cs-formula">\(v = 331\sqrt{T/273}\) m/s</div>
+        <div class="cs-formula">\(v = \sqrt{Y/\rho}\) — varilla sólida</div>
+        <div class="cs-formula">\(v = \sqrt{B/\rho}\) — fluido</div>
+        <div class="cs-formula">\(v = \sqrt{\gamma RT/M}\) — gas ideal</div>
+        <div class="cs-note">T siempre en Kelvin. γ_aire = 1.4. R = 8.314 J/mol·K</div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-topic">Tubos resonantes</div>
+        <div class="cs-formula">Abierto: \(f_n = \tfrac{nv}{2L}\), n = 1,2,3…</div>
+        <div class="cs-formula">Cerrado: \(f_n = \tfrac{nv}{4L}\), n = 1,3,5…</div>
+        <div class="cs-note">Abierto = todos armónicos. Cerrado = solo impares</div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-topic">Intensidad y dB</div>
+        <div class="cs-formula">\(I = P/(4\pi r^2)\) W/m²</div>
+        <div class="cs-formula">\(I_1 r_1^2 = I_2 r_2^2\)</div>
+        <div class="cs-formula">\(\beta = 10\log(I/10^{-12})\) dB</div>
+        <div class="cs-note">I₀ = 10⁻¹² W/m² = 0 dB. Conversa normal ≈ 65 dB</div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-topic">Efecto Doppler</div>
+        <div class="cs-formula">\(f_o = f_s \cdot \dfrac{V + v_o}{V - v_s}\)</div>
+        <div class="cs-note">Acercamiento → signo que agranda f. Alejamiento → signo que achica f.<br>Fuente acerca: v<sub>s</sub>(+). Obs. acerca: v<sub>o</sub>(+)</div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-topic">Pulsaciones</div>
+        <div class="cs-formula">\(f_{\text{pulso}} = |f_1 - f_2|\)</div>
+        <div class="cs-note">Unidades: Hz = pulsaciones por segundo</div>
+      </div>
+
+      <div class="cs-card">
+        <div class="cs-topic">Correlaciones subjetivo ↔ objetivo</div>
+        <div class="cs-formula">Volumen ↔ Intensidad (W/m²)</div>
+        <div class="cs-formula">Tono ↔ Frecuencia (Hz)</div>
+        <div class="cs-formula">Timbre ↔ Forma de onda</div>
+        <div class="cs-note">Rango audible: 20 Hz – 20 000 Hz</div>
+      </div>
+
+    </div>
+    <p style="text-align:center;margin-top:1.5rem;font-size:12px;color:#6a8aaa;">Cap. 22 • Física — Tippens • Nivel 12 — Estudio 3 días</p>
+  </div>
+</div>
+
+</div><!-- /page -->
+</body>
+</html>
